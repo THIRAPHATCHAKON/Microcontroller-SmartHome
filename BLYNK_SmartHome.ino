@@ -1,6 +1,6 @@
-#define BLYNK_TEMPLATE_ID "TMPL6UQ8GvBrS"
-#define BLYNK_TEMPLATE_NAME "IOT Smart Farm"
-#define BLYNK_AUTH_TOKEN "xtpyV2LEDL0hxoOtTd7oUvvXIZ_UZB2C"
+#define BLYNK_TEMPLATE_ID "BLYNK_ID_NAME" // BLYNK_ID_NAME
+#define BLYNK_TEMPLATE_NAME "BLYNK_TEMPLATE_NAME" // BLYNK_TEMPLATE_NAME
+#define BLYNK_AUTH_TOKEN "BLYNK_AUTH_TOKEN" // BLYNK_AUTH_TOKEN
 
 #define BLYNK_PRINT Serial
 #define I2C_ADDR 0x27
@@ -31,9 +31,9 @@ RTC_DS1307 rtc;
 LiquidCrystal_I2C lcd(I2C_ADDR, LCD_COLUMNS, LCD_LINES);
 
 char auth[] = BLYNK_AUTH_TOKEN;
-char ssid[] = "jackplace_2.4G";
-char pass[] = "22220890";
-const char* scriptURL = "https://script.google.com/macros/s/AKfycby-wC929uNjSS2D5xK_-v5KiSyniQBJJ3FCU5Q5dTo629PPcUx45Rr9MO1R0_tizDW-/exec";
+char ssid[] = "WIFI_NAME"; //WIFI_NAME
+char pass[] = "WIFI_PASS"; //WIFI_PASS
+const char* scriptURL = "https://script.google.com/macros/s/AKfycby-wC929uNjSS2D5xK_-v5KiSyniQBJJ3FCU5Q5dTo629PPcUx45Rr9MO1R0_tizDW-/exec"; // SCRIPT GOOGLE SHEETS
 
 void checkWiFiConnection() {
     if (WiFi.status() != WL_CONNECTED) {
@@ -43,7 +43,7 @@ void checkWiFiConnection() {
     }
 }
 
-void clearEEPROM() {
+void clearEEPROM() { // CLEAR EEPROM MEMORY
     for (int i = 0; i < 16; i++) {
         EEPROM.write(i, 0);
     }
@@ -51,7 +51,7 @@ void clearEEPROM() {
     Serial.println("EEPROM cleared!");
 }
 
-void sendToExcel() {
+void sendToExcel() { // SEND DATA TO GOOGLE SHEETS
     float temperature = dht.readTemperature();
     float humidity = dht.readHumidity();
     
@@ -64,7 +64,7 @@ void sendToExcel() {
     }
 }
 
-void sendSensor() {
+void sendSensor() { // SENSOR READ VALUE
   for (int j = 1; j < 6; j++) {
     temp = dht.readTemperature();
     hum = dht.readHumidity();
@@ -95,7 +95,7 @@ void sendSensor() {
   }
 }
 
-void display_sensor(float &temp,float &hum,float &avgMinTemp,float &avgMaxTemp) {
+void display_sensor(float &temp,float &hum,float &avgMinTemp,float &avgMaxTemp) { // DISPLAY VALUE TO LCD
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("T:"); lcd.print(temp); lcd.print("C H:"); lcd.print(hum); lcd.print("%");
@@ -113,7 +113,7 @@ void humidity_in_missouri() { //ตรวจจับค่าความชื
     Blynk.virtualWrite(V4, prese_humidity_missouri);
 }
 
-void sendTime() { //แสดงเวลาเข้า LCD
+void sendTime() { // DISPLAY TIME TO LCD
   for (int i = 1; i < 6; i++) {
     DateTime now = rtc.now();
     lcd.clear();
@@ -136,12 +136,12 @@ void sendTime() { //แสดงเวลาเข้า LCD
   }
 }
 
-void printTwoDigits(int number) { //แสดงเลขศูนย์ข้างหน้าวันเวลาที่เป็นหลักหน่วย
+void printTwoDigits(int number) { // DISPLAY DIGITS NUMBER TO LCD
     if (number < 10) lcd.print("0");
     lcd.print(number);
 }
 
-void setup() {
+void setup() { // SETUP ARDUINO
     EEPROM.begin(16);
     Serial.begin(9600);
     Wire.begin();
@@ -181,7 +181,7 @@ void setup() {
     timer.setInterval(5000L, sendToExcel);
 }
 
-void loop() {
+void loop() { // LOOP FUNCTION
     checkWiFiConnection();
     Blynk.run();
     timer.run();
